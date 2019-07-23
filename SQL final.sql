@@ -297,15 +297,14 @@ VALUES
 (50, 'Steven Ling')
 ;
 
+Go
+CREATE PROCEDURE GatheringInformation
+AS
 Select * FROM tbl_BookCopies WHERE BookCopies_BookID = 1 and BookCopies_BranchID = 1;
 Select * FROM tbl_BookCopies WHERE BookCopies_BookID = 1;
-Select * FROM tbl_BookLoans INNER JOIN tbl_Borrower ON  BookLoans_CardNo = Borrower_CardNo WHERE BookLoans_DateOut = null;
-Select * FROM tbl_BookLoans JOIN tbl_books ON Books_BookID = BookLoans_BookID JOIN tbl_Borrower ON Borrower_CardNo = BookLoans_CardNo  WHERE BookLoans_BranchID = 1 and BookLoans_DateDue = '2012-02-12';
-
-Select * FROM  tbl_LibraryBranch JOIN tbl_BookLoans ON LibraryBranch_BranchID = BookLoans_BranchID WHERE LibraryBranch_BranchID = 1;
-Select * FROM  tbl_LibraryBranch JOIN tbl_BookLoans ON LibraryBranch_BranchID = BookLoans_BranchID WHERE LibraryBranch_BranchID = 2;
-Select * FROM  tbl_LibraryBranch JOIN tbl_BookLoans ON LibraryBranch_BranchID = BookLoans_BranchID WHERE LibraryBranch_BranchID = 3;
-Select * FROM  tbl_LibraryBranch JOIN tbl_BookLoans ON LibraryBranch_BranchID = BookLoans_BranchID WHERE LibraryBranch_BranchID = 4;
-
+Select Borrower_Name FROM tbl_BookLoans INNER JOIN tbl_Borrower ON  BookLoans_CardNo = Borrower_CardNo WHERE BookLoans_DateOut = null;
+Select Books_Title, Borrower_Name, Borrower_Address FROM tbl_BookLoans JOIN tbl_books ON Books_BookID = BookLoans_BookID JOIN tbl_Borrower ON Borrower_CardNo = BookLoans_CardNo  WHERE BookLoans_BranchID = 1 and BookLoans_DateDue = '2012-02-12';
+Select Count(BookLoans_BookID) as 'Number of Books Loaned', LibraryBranch_BranchName FROM  tbl_LibraryBranch JOIN tbl_BookLoans ON LibraryBranch_BranchID = BookLoans_BranchID GROUP BY LibraryBranch_BranchName, LibraryBranch_BranchID HAVING LibraryBranch_BranchID = 1 or LibraryBranch_BranchID = 2 or LibraryBranch_BranchID = 3 or LibraryBranch_BranchID = 4;
 Select Count(Borrower_CardNo) AS 'Number of Books Checked Out', Borrower_Name, Borrower_Address FROM tbl_Borrower JOIN tbl_BookLoans ON Borrower_CardNo = BookLoans_CardNo GROUP BY Borrower_Name, Borrower_CardNo, Borrower_Address HAVING(Borrower_CardNo) >= 5;
 Select * FROM tbl_BookCopies JOIN tbl_BookAuthors ON BookAuthors_BookID = BookCopies_BookID JOIN tbl_Books ON Books_BookID = BookAuthors_BookID WHERE BookCopies_BranchID = 2 and BookAuthors_AuthorName = 'Steven King';
+Go;
